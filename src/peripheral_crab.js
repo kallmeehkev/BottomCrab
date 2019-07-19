@@ -1,8 +1,13 @@
+const CONSTANTS = {
+    startDist: 140,
+    speed: 1.2,
+}
+
 export default class PeripheralCrab {
     constructor(dimensions) {
         this.dimensions = dimensions;
         this.center = [this.dimensions.width/2, this.dimensions.height/2];
-        this.r = 140;
+        this.r = CONSTANTS.startDist;
         this.pos_angle = (22.5 * Math.PI / 180);
         this.PeripheralCrab = new Image();
         this.PeripheralCrab.src = "../assets/images/PeripheralCrab.png";
@@ -34,7 +39,7 @@ export default class PeripheralCrab {
     }
 
     moveOut() {
-        this.r += 72;
+        this.r += CONSTANTS.speed;
     }
 
 }

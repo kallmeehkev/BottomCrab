@@ -36,8 +36,8 @@ export default class PeripheralCrab {
         this.drawPeripheralCrab(ctx);
     }
 
-    position() {
-        this.pos_angle += (45 * Math.PI / 180);
+    position(i) {
+        this.pos_angle += (45 * Math.PI / 180) * i;
     }
 
     moveOut() {

@@ -7,6 +7,7 @@ const CONSTANTS = {
     duration: 1000, //ms
     startDelay: 1000, //ms
     moveDelay: 1000, //ms
+    outerBound: 325,
 }
 
 let starttime = new Date().getTime();
@@ -25,10 +26,20 @@ export default class Game {
     }
 
     animate() {
+        if (this.gameOver()) {
+            console.log("You're the bottomest of BottomCrabs!");
+            this.restart();
+        }
+        this.peripheralCrabs.forEach((crab) => {
+            if (this.bottomCrab.claw.collidesWith(crab)) crab.reset();
+        })
         this.level.animate(this.ctx);
         this.bottomCrab.animate(this.ctx);
         for(let i = 7; i >= 0; i--) {
             this.peripheralCrabs[i].animate(this.ctx);
+        }
+        if (this.clawActive) {
+            this.bottomCrab.claw.animate(this.ctx);
         }
         if (this.running) {
             requestAnimationFrame(this.animate.bind(this));
@@ -58,6 +69,13 @@ export default class Game {
 
     restart() {
         this.running = false;
+        this.gameover = false;
+        this.clawActive = false;
+        timestamp = new Date().getTime();
+        starttime = timestamp;
+        bufferStart = timestamp;
+        interval = timestamp;
+
         this.level = new Level(this.dimensions);
         this.bottomCrab = new BottomCrab(this.dimensions);
         this.peripheralCrabs = [];
@@ -71,30 +89,30 @@ export default class Game {
                 }
             }
         }
-        this.bottomCrab.drawGrid(this.ctx);
-        timestamp = new Date().getTime();
-        starttime = timestamp;
-        bufferStart = timestamp;
-        interval = timestamp;
         this.animate();
     }
 
-    click(e) {
-        if (!this.running) {
-            this.play();
-        }
+    gameOver() {
+        this.peripheralCrabs.forEach( (crab) => {
+            if( crab.r > CONSTANTS.outerBound) this.gameover = true;
+        })
+        return this.gameover;
     }
 
     play() {
         this.running = true;
-
         this.animate();
     }
 
     registerEvents() {
         document.addEventListener("mousedown", this.click.bind(this));
-        document.addEventListener("keydown", this.keydown.bind(this))
+        document.addEventListener("keydown", this.keydown.bind(this));
         // this.ctx.canvas.addEventListener("click", this.click.bind(this));
+        document.addEventListener("keyup", this.keyup.bind(this));
+    }
+
+    keyup(e) {
+        this.clawActive = false;
     }
 
     keydown(e) {
@@ -115,13 +133,20 @@ export default class Game {
                 this.bottomCrab.moveBottomCrabCW();
                 break;
             case "ArrowUp":
-                // Up pressed
+                this.clawActive = true;
+                this.bottomCrab.claw.extendClaw();
                 break;
             case "ArrowDown":
-                // Down pressed
+                this.clawActive = true;
+                this.bottomCrab.claw.retractClaw();
                 break;
         }
     }
 
+    click(e) {
+        if (!this.running) {
+            this.play();
+        }
+    }    
 
 }

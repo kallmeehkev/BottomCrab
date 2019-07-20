@@ -1,7 +1,10 @@
+import Claw from './claw';
+
 const CONSTANTS = {
     ROTATION_ANGLE: 45,  //in degrees
     CRAB_RAD1: 70,
     CRAB_RAD2: 45,
+    outerBound: 325,
 };
 // const BOTTOM_CRAB = document.getElementById("source")
 
@@ -12,10 +15,10 @@ export default class BottomCrab {
         this.y = this.dimensions.height/2;
         this.position_angle = 0;
         this.BottomCrab = new Image();
-        this.BottomCrab.src = "../assets/images/BottomCrab2.png"
+        this.BottomCrab.src = "../assets/images/BottomCrab2.png";
         // this.BottomCrab.src = "../assets/images/PeripheralCrab.png"
         // this.BottomCrab.src = "../assets/images/5d30157724707 copy.png"
-        console.log(this.BottomCrab.src);
+        this.claw = new Claw(this.dimensions, this.position_angle);
     }
 
     drawBottomCrab(ctx) {
@@ -53,7 +56,7 @@ export default class BottomCrab {
         ctx.arc(this.x, this.y, 250, 0, 2 * Math.PI);
         ctx.stroke();
         ctx.beginPath();
-        ctx.arc(this.x, this.y, 325, 0, 2 * Math.PI);
+        ctx.arc(this.x, this.y, CONSTANTS.outerBound, 0, 2 * Math.PI);
         ctx.stroke();
 
         //lines
@@ -82,9 +85,11 @@ export default class BottomCrab {
 
     moveBottomCrabCW() {
         this.position_angle += (CONSTANTS.ROTATION_ANGLE * Math.PI / 180)
+        this.claw.pos_angle = this.position_angle - (22.5 * Math.PI / 180);
     }
 
     moveBottomCrabCCW() {
-        this.position_angle -= (CONSTANTS.ROTATION_ANGLE * Math.PI / 180)
+        this.position_angle -= (CONSTANTS.ROTATION_ANGLE * Math.PI / 180);
+        this.claw.pos_angle = this.position_angle + (22.5 * Math.PI / 180);
     }
 }

@@ -1,7 +1,7 @@
 import Claw from './claw';
 
 const CONSTANTS = {
-    ROTATION_ANGLE: 45,  //in degrees
+    ROTATION_ANGLE: 2.5,  //in degrees
     CRAB_RAD1: 70,
     CRAB_RAD2: 45,
     outerBound: 325,
@@ -85,11 +85,11 @@ export default class BottomCrab {
 
     moveBottomCrabCW() {
         this.position_angle += (CONSTANTS.ROTATION_ANGLE * Math.PI / 180)
-        this.claw.pos_angle = this.position_angle - (22.5 * Math.PI / 180);
+        this.claw.pos_angle += (CONSTANTS.ROTATION_ANGLE * Math.PI / 180);
     }
 
     moveBottomCrabCCW() {
         this.position_angle -= (CONSTANTS.ROTATION_ANGLE * Math.PI / 180);
-        this.claw.pos_angle = this.position_angle + (22.5 * Math.PI / 180);
+        this.claw.pos_angle -= (CONSTANTS.ROTATION_ANGLE * Math.PI / 180);
     }
 }

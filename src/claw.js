@@ -1,8 +1,8 @@
 const CONSTANTS = {
     clawRadius: 40,
-    clawSpeed: 20,
+    clawSpeed: 3.0,
     maxRange: 300,
-    startDist: 40,
+    startDist: 70,
 }
 
 let posX;
@@ -68,7 +68,7 @@ export default class Claw {
             let dx = bound1.centerX - bound2.centerX;
             let dy = bound1.centerY - bound2.centerY;
             let distance = Math.sqrt(dx * dx + dy * dy);
-            if (5*distance < bound1.radius + bound2.radius) {
+            if (2*distance < bound1.radius + bound2.radius) {
                 // collision detected!
                 return true;
             }    
@@ -77,7 +77,7 @@ export default class Claw {
         let collision = false;
        
         if (_overlap(this.bounds(), crab.bounds())) { 
-            this.resetClaw();
+            // this.resetClaw();
             collision = true; 
         };
         return collision;

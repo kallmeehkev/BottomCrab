@@ -2,6 +2,7 @@ const CONSTANTS = {
     startDist: 140,
     speed: 1.2,
     bodyRadius: 40,
+    pulledInSpeed: 3.0,
 }
 
 export default class PeripheralCrab {
@@ -42,6 +43,10 @@ export default class PeripheralCrab {
 
     moveOut() {
         this.r += CONSTANTS.speed;
+    }
+
+    pulledIn() {
+        this.r -= CONSTANTS.pulledInSpeed;
     }
 
     reset() {

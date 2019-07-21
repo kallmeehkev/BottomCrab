@@ -1,5 +1,5 @@
 import Game from './game';
-document.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("load", function () { //DOMContentLoaded
     const canvas = document.getElementById("myCanvas");
     new Game(canvas);
     // ctx.fillStyle = "rgba(12,124,123,1)";

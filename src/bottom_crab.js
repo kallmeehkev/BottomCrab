@@ -18,6 +18,8 @@ export default class BottomCrab {
         this.BottomCrab.src = "../assets/images/BottomCrab2.png";
         // this.BottomCrab.src = "../assets/images/PeripheralCrab.png"
         // this.BottomCrab.src = "../assets/images/5d30157724707 copy.png"
+        this.BottomCrabBody = new Image();
+        this.BottomCrabBody.src = "../assets/images/5d30155431d42onearm.png";
         this.claw = new Claw(this.dimensions, this.position_angle);
     }
 
@@ -42,6 +44,21 @@ export default class BottomCrab {
         // ctx.stroke();
         // ctx.fillStyle = "red";
         // ctx.fill();
+    }
+
+    drawBottomCrabBody(ctx) {
+        let img = {
+            x: 0,
+            y: 0,
+            w: 1500,
+            h: 1500,
+        }
+        let destDimen = 200;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.position_angle);
+        ctx.drawImage(this.BottomCrabBody, img.x, img.y, img.w, img.h, -100, -100, destDimen, destDimen)
+        ctx.rotate(-this.position_angle);
+        ctx.translate(-this.x, -this.y);
     }
 
     drawGrid(ctx) {
@@ -80,6 +97,11 @@ export default class BottomCrab {
 
     animate(ctx) {
         this.drawBottomCrab(ctx)
+        this.drawGrid(ctx);
+    }
+
+    animateBody(ctx) {
+        this.drawBottomCrabBody(ctx);
         this.drawGrid(ctx);
     }
 

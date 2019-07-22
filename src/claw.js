@@ -2,7 +2,7 @@ const CONSTANTS = {
     clawRadius: 40,
     clawSpeed: 3.0,
     maxRange: 300,
-    startDist: 70,
+    startDist: 60,
 }
 
 let posX;
@@ -15,6 +15,8 @@ export default class Claw {
         this.clawRadius = CONSTANTS.clawRadius;
         this.r = CONSTANTS.startDist;
         this.pos_angle = crabAngle + (22.5 * Math.PI / 180);
+        this.clawImage = new Image();
+        this.clawImage.src = "../assets/images/5d30155431d42claw3.png";
         this.moveClaw();
     }
 
@@ -42,11 +44,27 @@ export default class Claw {
     }
 
     drawClaw(ctx) {
-        ctx.beginPath();
-        ctx.arc(this.center[0] + posX, this.center[1] + posY, 40, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.fillStyle = 'red';
-        ctx.fill();
+        let img = {
+            x: 0,
+            y: 0,
+            w: 750,
+            h: 1500,
+        }
+        let destDimen = 200;
+        ctx.translate(this.center[0] + posX, this.center[1] + posY);
+        ctx.rotate(this.pos_angle);
+        ctx.drawImage(this.clawImage, img.x, img.y, img.w, img.h, -50, -125, destDimen/2, destDimen)
+        ctx.rotate(-this.pos_angle);
+        ctx.translate(-(this.center[0] + posX), -(this.center[1] + posY));
+
+
+        // ctx.beginPath();
+        // ctx.arc(this.center[0] + posX, this.center[1] + posY, 40, 0, 2 * Math.PI);
+        // ctx.stroke();
+        // ctx.fillStyle = 'red';
+        // ctx.fill();
+
+
         // ctx.rotate(-this.pos_angle);
         // ctx.translate(-this.center[0], -this.center[1]);
     }

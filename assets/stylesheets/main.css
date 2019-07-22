@@ -50,17 +50,19 @@
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
+    margin-bottom: 1vw;
 }
 
 .left_and_right_images {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     margin: 0.5vw 0;
 }
 
 .left_and_right_images img {
     width: 5vw;
+    padding: 0 2vw;
 }
 
 .left_and_right_text {

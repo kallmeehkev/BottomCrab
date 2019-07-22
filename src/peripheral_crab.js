@@ -17,18 +17,12 @@ export default class PeripheralCrab {
     }
 
     drawPeripheralCrab(ctx) {
-        let img = {
-            x: 0,
-            y: 0,
-            w: 800,
-            h: 800
-        }
         let posX = this.r * Math.cos(this.pos_angle);
         let posY = this.r * Math.sin(this.pos_angle);
         let rotateAngle =  Math.PI / 2 + this.pos_angle;
         ctx.translate(this.center[0] + posX, this.center[1] + posY);
         ctx.rotate(rotateAngle);
-        ctx.drawImage(this.PeripheralCrab, img.x, img.y, img.w, img.h, -40, -40, 80, 80)
+        ctx.drawImage(this.PeripheralCrab, 0, 0, 800, 800, -40, -40, 80, 80)
         ctx.rotate(-rotateAngle);
         ctx.translate(-(this.center[0] + posX), -(this.center[1] + posY));
     }

@@ -44,20 +44,24 @@ export default class Claw {
     }
 
     drawClaw(ctx) {
-        let img = {
-            x: 0,
-            y: 0,
-            w: 750,
-            h: 1500,
-        }
         let destDimen = 200;
+
+        ctx.translate(this.center[0], this.center[1]);
+        ctx.rotate(this.pos_angle - (0 * Math.PI / 180));
+        ctx.fillStyle = "#902529";
+        ctx.fillRect(0, 40, this.r-20, 6);
+        ctx.rotate(-(this.pos_angle - (0 * Math.PI / 180)));
+        ctx.translate(-(this.center[0]), -(this.center[1]));
+
         ctx.translate(this.center[0] + posX, this.center[1] + posY);
-        ctx.rotate(this.pos_angle);
-        ctx.drawImage(this.clawImage, img.x, img.y, img.w, img.h, -50, -125, destDimen/2, destDimen)
-        ctx.rotate(-this.pos_angle);
+        ctx.rotate(this.pos_angle - (22.5 * Math.PI / 180));
+        ctx.drawImage(this.clawImage, 0, 0, 750, 1500, -50, -112, destDimen/2, destDimen)
+        ctx.rotate(-(this.pos_angle - (22.5 * Math.PI / 180)));
         ctx.translate(-(this.center[0] + posX), -(this.center[1] + posY));
 
 
+
+        //#902529
         // ctx.beginPath();
         // ctx.arc(this.center[0] + posX, this.center[1] + posY, 40, 0, 2 * Math.PI);
         // ctx.stroke();

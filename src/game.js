@@ -1,7 +1,10 @@
 import Level from './level';
 import BottomCrab from './bottom_crab';
 import PeripheralCrab from './peripheral_crab';
-import { drawTimer, drawLostText, drawTitle, drawScore } from './draw_extra_stuff';
+import { drawTimer, drawLostText, drawWinText,
+    drawTitle, drawScore, 
+    drawReplay, replayButton, drawStart,
+    getMousePos, isInside } from './draw_extra_stuff';
 
 const CONSTANTS = {
     escape: 30,
@@ -41,18 +44,22 @@ export default class Game {
             this.level.animate(this.ctx);
             this.ctx.drawImage(this.initialSplash, 0, 0, 650, 526, 75, this.dimensions.height - 526 - 100, 650, 526)            
             drawTitle(this.ctx);
+            drawStart(this.ctx);
         } else {
             if (this.gameWon()) {
-                this.level.animate(this.ctx);
-                this.ctx.drawImage(this.winSplash, 0, 0, 1200, 2400, 200, 0, this.dimensions.width / 2, this.dimensions.height)
+                this.level.animateWon(this.ctx);
+                this.ctx.drawImage(this.winSplash, 0, 0, 1200, 2400, 250, 75, 315, 630)
                 // console.log("You're the bottomest of BottomCrabs!");
                 // this.restart();
+                drawWinText(this.ctx);
+                drawReplay(this.ctx);
                 this.running = false;
             }
             if (this.gameLost()) {
                 this.level.animate(this.ctx);
-                this.ctx.drawImage(this.loseSplash, 0, 0, 1024, 800, 16, 125, 768, 600)
+                this.ctx.drawImage(this.loseSplash, 0, 0, 1024, 808, 16, 125, 768, 606)
                 drawLostText(this.ctx);
+                drawReplay(this.ctx);
                 this.running = false;
             }
             if (this.running) {
@@ -199,9 +206,15 @@ export default class Game {
     }
 
     click(e) {
+        let mousePos = getMousePos(this.ctx.canvas, e);
         if (!this.running) {
-            this.restart();
-            this.play();
+            if (isInside(mousePos, replayButton)) {
+                // alert('clicked inside rect');
+                this.restart();
+                this.play();
+            } else {
+                // alert('clicked outside rect');
+            }    
         }
     }    
 

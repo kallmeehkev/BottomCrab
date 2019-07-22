@@ -24,16 +24,10 @@ export default class BottomCrab {
     }
 
     drawBottomCrab(ctx) {
-        let imgDimen = {
-            x: 0,
-            y: 0,
-            w: 1500,
-            h: 1500,
-        }
         let destDimen = 200;
         ctx.translate(this.x, this.y);
         ctx.rotate(this.position_angle);
-        ctx.drawImage(this.BottomCrab, imgDimen.x, imgDimen.y, imgDimen.w, imgDimen.h, -100, -100, destDimen, destDimen)
+        ctx.drawImage(this.BottomCrab, 0, 0, 1500, 1500, -100, -100, destDimen, destDimen)
         ctx.rotate(-this.position_angle);
         ctx.translate(-this.x, -this.y);
 
@@ -47,16 +41,10 @@ export default class BottomCrab {
     }
 
     drawBottomCrabBody(ctx) {
-        let img = {
-            x: 0,
-            y: 0,
-            w: 1500,
-            h: 1500,
-        }
         let destDimen = 200;
         ctx.translate(this.x, this.y);
         ctx.rotate(this.position_angle);
-        ctx.drawImage(this.BottomCrabBody, img.x, img.y, img.w, img.h, -100, -100, destDimen, destDimen)
+        ctx.drawImage(this.BottomCrabBody, 0, 0, 1500, 1500, -100, -100, destDimen, destDimen)
         ctx.rotate(-this.position_angle);
         ctx.translate(-this.x, -this.y);
     }
@@ -97,12 +85,12 @@ export default class BottomCrab {
 
     animate(ctx) {
         this.drawBottomCrab(ctx)
-        this.drawGrid(ctx);
+        // this.drawGrid(ctx);
     }
 
     animateBody(ctx) {
         this.drawBottomCrabBody(ctx);
-        this.drawGrid(ctx);
+        // this.drawGrid(ctx);
     }
 
     moveBottomCrabCW() {

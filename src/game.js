@@ -1,6 +1,7 @@
 import Level from './level';
 import BottomCrab from './bottom_crab';
 import PeripheralCrab from './peripheral_crab';
+import { drawTimer, drawLostText, drawTitle, drawScore } from './draw_extra_stuff';
 
 const CONSTANTS = {
     escape: 30,
@@ -39,7 +40,7 @@ export default class Game {
         if (!this.running) {
             this.level.animate(this.ctx);
             this.ctx.drawImage(this.initialSplash, 0, 0, 650, 526, 75, this.dimensions.height - 526 - 100, 650, 526)            
-            this.drawTitle();
+            drawTitle(this.ctx);
         } else {
             if (this.gameWon()) {
                 this.level.animate(this.ctx);
@@ -51,7 +52,7 @@ export default class Game {
             if (this.gameLost()) {
                 this.level.animate(this.ctx);
                 this.ctx.drawImage(this.loseSplash, 0, 0, 1024, 800, 16, 125, 768, 600)
-                this.drawLostText();
+                drawLostText(this.ctx);
                 this.running = false;
             }
             if (this.running) {
@@ -72,8 +73,8 @@ export default class Game {
                     this.bottomCrab.animate(this.ctx);
                 }
 
-                this.drawTimer();
-                this.drawScore();
+                drawTimer(this.ctx, this.countdown());
+                drawScore(this.ctx, this.score);
 
                 requestAnimationFrame(this.animate.bind(this));
                 timestamp = new Date().getTime();
@@ -134,6 +135,18 @@ export default class Game {
     }
 
     restart() {
+        this.reset();
+        this.level = new Level(this.dimensions);
+        this.bottomCrab = new BottomCrab(this.dimensions);
+        this.peripheralCrabs = [];
+        for(let i = 0; i < 8; i++) {
+            this.peripheralCrabs.push(new PeripheralCrab(this.dimensions));
+            this.peripheralCrabs[i].position(i);
+        }
+        this.animate();
+    }
+
+    reset() {
         this.running = false;
         this.clawActive = false;
         this.clawRetractActive = false;
@@ -145,15 +158,6 @@ export default class Game {
         timestamp = 0;
         bufferStart = 0;
         interval = 0;
-
-        this.level = new Level(this.dimensions);
-        this.bottomCrab = new BottomCrab(this.dimensions);
-        this.peripheralCrabs = [];
-        for(let i = 0; i < 8; i++) {
-            this.peripheralCrabs.push(new PeripheralCrab(this.dimensions));
-            this.peripheralCrabs[i].position(i);
-        }
-        this.animate();
     }
 
     gameLost() {
@@ -172,36 +176,6 @@ export default class Game {
         return gameover;
     }
 
-    drawTimer() {
-        const loc = {x: 50, y: 50};
-        this.ctx.font = "bold 30pt Bangers";
-        this.ctx.fillStyle = "white";
-        this.ctx.fillText(this.countdown(), loc.x, loc.y);
-        this.ctx.strokeStyle = "black";
-        this.ctx.lineWidth = 2;
-        this.ctx.strokeText(this.countdown(), loc.x, loc.y);
-    }
-
-    drawLostText() {
-        const loc = { x: 125, y: 100 };
-        this.ctx.font = "bold 36pt Bangers";
-        this.ctx.fillStyle = "white";
-        this.ctx.fillText("You're not BottomCrab enough!", loc.x, loc.y);
-        this.ctx.strokeStyle = "black";
-        this.ctx.lineWidth = 2;
-        this.ctx.strokeText("You're not BottomCrab enough!", loc.x, loc.y);
-    }
-
-    drawTitle() {
-        const loc = { x: 125, y: 100 };
-        this.ctx.font = "bold 36pt Bangers";
-        this.ctx.fillStyle = "white";
-        this.ctx.fillText("How BottomCrab are you!?", loc.x, loc.y);
-        this.ctx.strokeStyle = "black";
-        this.ctx.lineWidth = 2;
-        this.ctx.strokeText("How BottomCrab are you!?", loc.x, loc.y);
-    }
-
     countdown() {
         let minutes = Math.floor(this.timer / 60000);
         let seconds = Math.ceil((this.timer % 60000)/1000);
@@ -217,23 +191,19 @@ export default class Game {
         interval = timestamp;
     }
 
-    drawScore() {
-        // if (this.score > 10000) this.score = 0;
-        const loc = {x: this.dimensions.width - 100, y: 50};
-        this.ctx.font = "bold 30pt Bangers";
-        this.ctx.fillStyle = "white";
-        this.ctx.fillText(this.score, loc.x, loc.y);
-        this.ctx.strokeStyle = "black";
-        this.ctx.lineWidth = 2;
-        this.ctx.strokeText(this.score, loc.x, loc.y);
-    }
-
     registerEvents() {
         this.ctx.canvas.addEventListener("mousedown", this.click.bind(this));
         document.addEventListener("keydown", this.keydown.bind(this));
         // this.ctx.canvas.addEventListener("click", this.click.bind(this));
         document.addEventListener("keyup", this.keyup.bind(this));
     }
+
+    click(e) {
+        if (!this.running) {
+            this.restart();
+            this.play();
+        }
+    }    
 
     keyup(e) {
         switch (e.key) {
@@ -268,21 +238,13 @@ export default class Game {
                         this.bottomCrabActiveCCW = false;
                         break;
                     case "ArrowLeft":
-                        // this.bottomCrab.moveBottomCrabCCW();
                         this.bottomCrabActiveCCW = true;
                         this.clawActive = false;
                         break;
-                    // case "a":
-                    //     this.bottomCrab.moveBottomCrabCCW();
-                    //     break;
                     case "ArrowRight":
-                        // this.bottomCrab.moveBottomCrabCW();
                         this.bottomCrabActiveCW = true;
                         this.clawActive = false;
                         break;
-                    // case "d":
-                    //     this.bottomCrab.moveBottomCrabCW();
-                    //     break;
                     // case "ArrowDown":
                     //     this.clawActive = true;
                     //     this.bottomCrab.claw.retractClaw();
@@ -291,12 +253,5 @@ export default class Game {
             }
         })
     }
-
-    click(e) {
-        if (!this.running) {
-            this.restart();
-            this.play();
-        }
-    }    
 
 }

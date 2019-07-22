@@ -31,11 +31,11 @@ export default class Game {
         this.dimensions = { width: canvas.width, height: canvas.height };
         this.registerEvents();
         this.winSplash = new Image();
-        this.winSplash.src = "../assets/images/BottomCrab Splash.jpg";
+        this.winSplash.src = "./assets/images/BottomCrab Splash.jpg";
         this.loseSplash = new Image();
-        this.loseSplash.src = "../assets/images/BottomCrab loseSplash.png";
+        this.loseSplash.src = "./assets/images/BottomCrab loseSplash.png";
         this.initialSplash = new Image();
-        this.initialSplash.src = "../assets/images/CrabBucketEffect.jpg"
+        this.initialSplash.src = "./assets/images/CrabBucketEffect.jpg"
         this.restart();
     }
 

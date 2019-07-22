@@ -4,9 +4,9 @@ export default class Level {
         this.x = 200;
         this.y = 0;
         this.oceanFloor = new Image();
-        this.oceanFloor.src = "../assets/images/ocean-1214747_1920cropped.jpeg";
+        this.oceanFloor.src = "./assets/images/ocean-1214747_1920cropped.jpeg";
         this.net = new Image();
-        this.net.src = "../assets/images/net.png";
+        this.net.src = "./assets/images/net.png";
     }
 
     drawBackground(ctx) {

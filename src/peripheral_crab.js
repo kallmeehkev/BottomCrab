@@ -13,7 +13,7 @@ export default class PeripheralCrab {
         this.bodyRadius = CONSTANTS.bodyRadius;
         this.pos_angle = (22.5 * Math.PI / 180);
         this.PeripheralCrab = new Image();
-        this.PeripheralCrab.src = "../assets/images/PeripheralCrab.png";
+        this.PeripheralCrab.src = "./assets/images/PeripheralCrab.png";
     }
 
     drawPeripheralCrab(ctx) {

@@ -16,7 +16,7 @@ export default class Claw {
         this.r = CONSTANTS.startDist;
         this.pos_angle = crabAngle + (22.5 * Math.PI / 180);
         this.clawImage = new Image();
-        this.clawImage.src = "../assets/images/5d30155431d42claw3.png";
+        this.clawImage.src = "./assets/images/5d30155431d42claw3.png";
         this.moveClaw();
     }
 

@@ -208,7 +208,15 @@ export default class Game {
     click(e) {
         let mousePos = getMousePos(this.ctx.canvas, e);
         if (!this.running) {
-            if (isInside(mousePos, replayButton)) {
+            let rect = {
+                x: replayButton.x * 0.8,
+                y: replayButton.y * 0.8,
+                w: replayButton.w * 0.8,
+                h: replayButton.h * 0.8,
+            };
+            let is = isInside;
+            // debugger
+            if (isInside(mousePos, rect)) {
                 // alert('clicked inside rect');
                 this.restart();
                 this.play();
@@ -252,11 +260,11 @@ export default class Game {
                         break;
                     case "ArrowLeft":
                         this.bottomCrabActiveCCW = true;
-                        this.clawActive = false;
+                        // this.clawActive = false;
                         break;
                     case "ArrowRight":
                         this.bottomCrabActiveCW = true;
-                        this.clawActive = false;
+                        // this.clawActive = false;
                         break;
                     // case "ArrowDown":
                     //     this.clawActive = true;

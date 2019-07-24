@@ -1,7 +1,8 @@
 const CONSTANTS = {
     clawRadius: 40,
     clawSpeed: 3.0,
-    maxRange: 300,
+    maxRightRange: 300,
+    maxLeftRange: 200,
     startDist: 60,
 }
 
@@ -15,8 +16,10 @@ export default class Claw {
         this.clawRadius = CONSTANTS.clawRadius;
         this.r = CONSTANTS.startDist;
         this.pos_angle = crabAngle + (22.5 * Math.PI / 180);
-        this.clawImage = new Image();
-        this.clawImage.src = "./assets/images/5d30155431d42claw3.png";
+        this.rightClawImage = new Image();
+        this.rightClawImage.src = "./assets/images/5d30155431d42claw3.png";
+        this.leftClawImage = new Image();
+        this.leftClawImage.src = "./assets/images/5d30155431d42claw3.png";
         this.moveClaw();
     }
 
@@ -32,8 +35,15 @@ export default class Claw {
         this.moveClaw();
     }
 
-    extendClaw() {
-        if (this.r < CONSTANTS.maxRange) {
+    extendRightClaw() {
+        if (this.r < CONSTANTS.maxRightRange) {
+            this.r += CONSTANTS.clawSpeed;
+        }
+        this.moveClaw();
+    }
+
+    extendRightClaw() {
+        if (this.r < CONSTANTS.maxLeftRange) {
             this.r += CONSTANTS.clawSpeed;
         }
         this.moveClaw();
@@ -43,7 +53,7 @@ export default class Claw {
         this.r = CONSTANTS.startDist;
     }
 
-    drawClaw(ctx) {
+    drawRightClaw(ctx) {
         let destDimen = 200;
 
         ctx.translate(this.center[0], this.center[1]);
@@ -55,7 +65,7 @@ export default class Claw {
 
         ctx.translate(this.center[0] + posX, this.center[1] + posY);
         ctx.rotate(this.pos_angle - (22.5 * Math.PI / 180));
-        ctx.drawImage(this.clawImage, 0, 0, 750, 1500, -50, -112, destDimen/2, destDimen)
+        ctx.drawImage(this.rightClawImage, 0, 0, 750, 1500, -50, -112, destDimen/2, destDimen)
         ctx.rotate(-(this.pos_angle - (22.5 * Math.PI / 180)));
         ctx.translate(-(this.center[0] + posX), -(this.center[1] + posY));
 
@@ -73,8 +83,12 @@ export default class Claw {
         // ctx.translate(-this.center[0], -this.center[1]);
     }
 
+    drawLeftClaw(ctx) {
+
+    }
+
     animate(ctx) {
-        this.drawClaw(ctx);
+        this.drawRightClaw(ctx);
     }
 
     bounds() {

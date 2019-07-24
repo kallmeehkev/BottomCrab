@@ -71,3 +71,19 @@
     font-family: 'Bangers', cursive;
     font-size: 1.5vw;
 }
+
+#music {
+    display: none;
+}
+
+button{
+    height: 2vw;
+    width: 2vw;
+    margin: 1vw;
+}
+
+i {
+    font-size: 2vw;
+    height: 2vw;
+    width: 2vw;
+}

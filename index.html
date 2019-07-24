@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>BottomCrab</title>
+    <link rel="shortcut icon" href="./assets/images/BottomCrab2.png" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/css?family=Bangers&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./assets/stylesheets/reset.css">
     <link rel="stylesheet" type="text/css" href="./assets/stylesheets/application.css">
     <link rel="stylesheet" type="text/css" href="./assets/stylesheets/main.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" 
+        crossorigin="anonymous">
     <script src="./dist/bundle.js"></script>
 </head>
 <body>
@@ -47,6 +51,15 @@
                     </div>
                 </div>
             </div>
+            <audio autoplay loop id="music">
+                <source src="./assets/Ocean Sounds.mp3" type="audio/mpeg">
+            </audio>
+            <!-- <div>
+                <button onclick="document.getElementById('music').play()">Play</button>
+                <button onclick="document.getElementById('music').pause()">Pause</button>
+                <button onclick="document.getElementById('music').muted=!document.getElementById('music').muted"><i class="fas fa-volume-off"></i></button>
+            </div> -->
+
         </div>
         <div class="canvas"><canvas id="myCanvas" height="800" width="800"></canvas></div>
     </div>

@@ -20,7 +20,8 @@ export default class BottomCrab {
         // this.BottomCrab.src = "./assets/images/5d30157724707 copy.png"
         this.BottomCrabBody = new Image();
         this.BottomCrabBody.src = "./assets/images/5d30155431d42onearm.png";
-        this.claw = new Claw(this.dimensions, this.position_angle);
+        this.rightClaw = new Claw(this.dimensions, this.position_angle);
+        this.leftClaw = new Claw(this.dimensions, this.position_angle + Math.PI*(3/4));
     }
 
     drawBottomCrab(ctx) {
@@ -31,13 +32,6 @@ export default class BottomCrab {
         ctx.rotate(-this.position_angle);
         ctx.translate(-this.x, -this.y);
 
-        // ctx.beginPath();
-        // ctx.ellipse(100, 100, CONSTANTS.CRAB_RAD1, CONSTANTS.CRAB_RAD2, 0, 0, 2 * Math.PI, true); //(x, y, radius1, radius2, position angle, start angle, end angle, counterclockwise boolean)
-        // ctx.strokeStyle = "black";
-        // ctx.lineWidth = 1;
-        // ctx.stroke();
-        // ctx.fillStyle = "red";
-        // ctx.fill();
     }
 
     drawBottomCrabBody(ctx) {
@@ -95,11 +89,13 @@ export default class BottomCrab {
 
     moveBottomCrabCW() {
         this.position_angle += (CONSTANTS.ROTATION_ANGLE * Math.PI / 180)
-        this.claw.pos_angle += (CONSTANTS.ROTATION_ANGLE * Math.PI / 180);
+        this.rightClaw.pos_angle += (CONSTANTS.ROTATION_ANGLE * Math.PI / 180);
+        this.leftClaw.pos_angle += (CONSTANTS.ROTATION_ANGLE * Math.PI / 180);
     }
 
     moveBottomCrabCCW() {
         this.position_angle -= (CONSTANTS.ROTATION_ANGLE * Math.PI / 180);
-        this.claw.pos_angle -= (CONSTANTS.ROTATION_ANGLE * Math.PI / 180);
+        this.rightClaw.pos_angle -= (CONSTANTS.ROTATION_ANGLE * Math.PI / 180);
+        this.leftClaw.pos_angle -= (CONSTANTS.ROTATION_ANGLE * Math.PI / 180);
     }
 }

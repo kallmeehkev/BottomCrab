@@ -2,8 +2,7 @@ import Claw from './claw';
 
 const CONSTANTS = {
     ROTATION_ANGLE: 2.5,  //in degrees
-    CRAB_RAD1: 70,
-    CRAB_RAD2: 45,
+    LCLAWOFFSET: Math.PI * (3 / 2),
     outerBound: 325,
 };
 // const BOTTOM_CRAB = document.getElementById("source")
@@ -16,12 +15,14 @@ export default class BottomCrab {
         this.position_angle = 0;
         this.BottomCrab = new Image();
         this.BottomCrab.src = "./assets/images/BottomCrab2.png";
-        // this.BottomCrab.src = "./assets/images/PeripheralCrab.png"
-        // this.BottomCrab.src = "./assets/images/5d30157724707 copy.png"
         this.BottomCrabBody = new Image();
-        this.BottomCrabBody.src = "./assets/images/5d30155431d42onearm.png";
-        this.rightClaw = new Claw(this.dimensions, this.position_angle);
-        this.leftClaw = new Claw(this.dimensions, this.position_angle + Math.PI*(3/4));
+        this.BottomCrabBody.src = "./assets/images/5d30155431d42noarms.png";
+        this.rightClawImage = new Image();
+        this.rightClawImage.src = "./assets/images/5d30155431d42claw3.png";
+        this.leftClawImage = new Image();
+        this.leftClawImage.src = "./assets/images/5d30155431d42leftclaw.png";
+        this.rightClaw = new Claw(this.dimensions, this.position_angle, this.rightClawImage);
+        this.leftClaw = new Claw(this.dimensions, this.position_angle + CONSTANTS.LCLAWOFFSET, this.leftClawImage);
     }
 
     drawBottomCrab(ctx) {
@@ -79,7 +80,7 @@ export default class BottomCrab {
 
     animate(ctx) {
         this.drawBottomCrab(ctx)
-        // this.drawGrid(ctx);
+        this.drawGrid(ctx);
     }
 
     animateBody(ctx) {

@@ -2,34 +2,37 @@ const CONSTANTS = {
     clawRadius: 40,
     clawSpeed: 3.0,
     maxRightRange: 300,
-    maxLeftRange: 200,
-    startDist: 60,
+    maxLeftRange: 250,
+    startDist: 45,
 }
 
-let posX;
-let posY;
+// let posX;
+// let posY;
 
 export default class Claw {
-    constructor(dimensions, crabAngle) {
+    constructor(dimensions, clawAngle, image) {
         this.dimensions = dimensions;
         this.center = [this.dimensions.width/2, this.dimensions.height/2];
         this.clawRadius = CONSTANTS.clawRadius;
         this.r = CONSTANTS.startDist;
-        this.pos_angle = crabAngle + (22.5 * Math.PI / 180);
-        this.rightClawImage = new Image();
-        this.rightClawImage.src = "./assets/images/5d30155431d42claw3.png";
-        this.leftClawImage = new Image();
-        this.leftClawImage.src = "./assets/images/5d30155431d42claw3.png";
+        this.pos_angle = clawAngle
+        // this.rightClawImage = new Image();
+        // this.rightClawImage.src = "./assets/images/5d30155431d42claw3.png";
+        // this.leftClawImage = new Image();
+        // this.leftClawImage.src = "./assets/images/5d30155431d42leftclaw.png";
+        this.image = image;
+        this.posX = 0;
+        this.posY = 0;
         this.moveClaw();
     }
 
     moveClaw() {
-        posX = this.r * Math.cos(this.pos_angle);
-        posY = this.r * Math.sin(this.pos_angle);
+        this.posX = this.r * Math.cos(this.pos_angle);
+        this.posY = this.r * Math.sin(this.pos_angle);
     }
 
     retractClaw() {
-        if (this.r > (CONSTANTS.clawSpeed + CONSTANTS.startDist)) {
+        if (this.r >= (CONSTANTS.clawSpeed + CONSTANTS.startDist)) {
             this.r -= (CONSTANTS.clawSpeed); //can tune for slower retraction rate
         }
         this.moveClaw();
@@ -40,9 +43,10 @@ export default class Claw {
             this.r += CONSTANTS.clawSpeed;
         }
         this.moveClaw();
+        
     }
 
-    extendRightClaw() {
+    extendLeftClaw() {
         if (this.r < CONSTANTS.maxLeftRange) {
             this.r += CONSTANTS.clawSpeed;
         }
@@ -55,46 +59,60 @@ export default class Claw {
 
     drawRightClaw(ctx) {
         let destDimen = 200;
+        //arm represented by scaling rectangle
 
         ctx.translate(this.center[0], this.center[1]);
-        ctx.rotate(this.pos_angle - (0 * Math.PI / 180));
+        ctx.rotate(this.pos_angle);
         ctx.fillStyle = "#902529";
-        ctx.fillRect(0, 40, this.r-20, 6);
-        ctx.rotate(-(this.pos_angle - (0 * Math.PI / 180)));
+        ctx.fillRect(-15, 40, this.r - 10, 6);
+        ctx.rotate(-(this.pos_angle));
         ctx.translate(-(this.center[0]), -(this.center[1]));
 
-        ctx.translate(this.center[0] + posX, this.center[1] + posY);
-        ctx.rotate(this.pos_angle - (22.5 * Math.PI / 180));
-        ctx.drawImage(this.rightClawImage, 0, 0, 750, 1500, -50, -112, destDimen/2, destDimen)
-        ctx.rotate(-(this.pos_angle - (22.5 * Math.PI / 180)));
-        ctx.translate(-(this.center[0] + posX), -(this.center[1] + posY));
-
-
+        ctx.translate(this.center[0] + this.posX, this.center[1] + this.posY);
+        ctx.rotate(this.pos_angle);
+        ctx.drawImage(this.image, 0, 0, 750, 1500, -45, -100, destDimen/2, destDimen)
+        ctx.rotate(-(this.pos_angle));
+        ctx.translate(-(this.center[0] + this.posX), -(this.center[1] + this.posY));
 
         //#902529
         // ctx.beginPath();
-        // ctx.arc(this.center[0] + posX, this.center[1] + posY, 40, 0, 2 * Math.PI);
+        // ctx.arc(this.center[0] + this.posX, this.center[1] + this.posY, 40, 0, 2 * Math.PI);
         // ctx.stroke();
         // ctx.fillStyle = 'red';
         // ctx.fill();
-
 
         // ctx.rotate(-this.pos_angle);
         // ctx.translate(-this.center[0], -this.center[1]);
     }
 
     drawLeftClaw(ctx) {
+        let destDimen = 200;
 
+        ctx.translate(this.center[0], this.center[1]);
+        ctx.rotate(this.pos_angle);
+        ctx.fillStyle = "#902529";
+        ctx.fillRect(-2, -60, this.r - 10, 6);
+        ctx.rotate(-(this.pos_angle));
+        ctx.translate(-(this.center[0]), -(this.center[1]));
+
+        ctx.translate(this.center[0] + this.posX, this.center[1] + this.posY);
+        ctx.rotate(this.pos_angle + Math.PI * (1 / 2));
+        ctx.drawImage(this.image, 0, 0, 750, 1500, -85.5, -55, destDimen / 2, destDimen)
+        ctx.rotate(-(this.pos_angle + Math.PI * (1 / 2)));
+        ctx.translate(-(this.center[0] + this.posX), -(this.center[1] + this.posY));
     }
 
-    animate(ctx) {
+    animateRight(ctx) {
         this.drawRightClaw(ctx);
+    }
+    animateLeft(ctx) {
+        this.drawLeftClaw(ctx);
     }
 
     bounds() {
         return {
-            centerX: this.center[0] + posX,
-            centerY: this.center[1] + posY,
+            centerX: this.center[0] + this.posX,
+            centerY: this.center[1] + this.posY,
             radius: this.clawRadius,
         }
     }

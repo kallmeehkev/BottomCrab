@@ -1,10 +1,10 @@
 export default class Level {
     constructor(dimensions) {
         this.dimensions = dimensions;
-        this.x = 200;
+        this.x = 130;
         this.y = 0;
         this.oceanFloor = new Image();
-        this.oceanFloor.src = "./assets/images/ocean-1214747_1920cropped.jpeg";
+        this.oceanFloor.src = "./assets/images/ocean-1214747_1920cropped800.jpeg";
         this.net = new Image();
         this.net.src = "./assets/images/net.png";
     }
@@ -28,13 +28,13 @@ export default class Level {
     }
 
     drawOceanFloor(ctx) {
-        ctx.drawImage(this.oceanFloor, this.x, this.y, 1067, 800, 0, 0, 1067, 800);
-        // ctx.drawImage(this.net, 0, 0, 600, 600, 100, 100, 600, 600);
+        ctx.drawImage(this.oceanFloor, 0, 0, 1067, 800, 0, 0, 1067, 800);
+        ctx.drawImage(this.net, 0, 0, 575, 450, this.x, 120, 575, 450);
         //background scroll
-        if (this.x <= 170) {
+        if (this.x <= 90) {
             this.flowLeft = false;
         } 
-         if (this.x >= 200) {
+         if (this.x >= 130) {
             this.flowLeft = true;
         }
         if (this.flowLeft) {

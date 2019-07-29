@@ -2,7 +2,7 @@ const CONSTANTS = {
     startDist: 140,
     speed: 1.2,
     bodyRadius: 40,
-    pulledInSpeed: 3.0,
+    pulledInSpeed: 3.2,
 }
 
 export default class PeripheralCrab {

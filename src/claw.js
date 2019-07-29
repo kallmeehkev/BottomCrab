@@ -69,6 +69,10 @@ export default class Claw {
         ctx.translate(-(this.center[0]), -(this.center[1]));
 
         ctx.translate(this.center[0] + this.posX, this.center[1] + this.posY);
+        // console.log(`right`)
+        // console.log(`X: ${this.center[0] + this.posX + (45 * Math.cos(this.pos_angle + Math.PI / 2))}`);
+        // console.log(`Y: ${this.center[1] + this.posY + (45 * Math.sin(this.pos_angle + Math.PI / 2))}`);
+        // console.log(`Angle: ${this.pos_angle * (180/Math.PI)}`);
         ctx.rotate(this.pos_angle);
         ctx.drawImage(this.image, 0, 0, 750, 1500, -45, -100, destDimen/2, destDimen)
         ctx.rotate(-(this.pos_angle));
@@ -96,6 +100,10 @@ export default class Claw {
         ctx.translate(-(this.center[0]), -(this.center[1]));
 
         ctx.translate(this.center[0] + this.posX, this.center[1] + this.posY);
+        // console.log(`left`)
+        // console.log(`X: ${this.center[0] + this.posX + (45 * Math.cos(this.pos_angle - Math.PI / 2))}`);
+        // console.log(`Y: ${this.center[1] + this.posY + (45 * Math.sin(this.pos_angle - Math.PI / 2))}`);
+        // console.log(`Angle: ${this.pos_angle * (180/Math.PI)}`);
         ctx.rotate(this.pos_angle + Math.PI * (1 / 2));
         ctx.drawImage(this.image, 0, 0, 750, 1500, -85.5, -55, destDimen / 2, destDimen)
         ctx.rotate(-(this.pos_angle + Math.PI * (1 / 2)));
@@ -109,28 +117,40 @@ export default class Claw {
         this.drawLeftClaw(ctx);
     }
 
-    bounds() {
-        return {
-            centerX: this.center[0] + this.posX,
-            centerY: this.center[1] + this.posY,
+    rightBounds() {
+        let bounds = {
+            centerX: this.center[0] + this.posX + (48 * Math.cos(this.pos_angle + Math.PI / 2)),
+            centerY: this.center[1] + this.posY + (48 * Math.sin(this.pos_angle + Math.PI / 2)),
             radius: this.clawRadius,
         }
+        
+        return bounds;
     }
 
-    collidesWith(crab) {
+    leftBounds() {
+        let bounds = {
+            centerX: this.center[0] + this.posX + (48 * Math.cos(this.pos_angle - Math.PI / 2)),
+            centerY: this.center[1] + this.posY + (48 * Math.sin(this.pos_angle - Math.PI / 2)),
+            radius: this.clawRadius,
+        }
+        
+        return bounds;
+    }
+
+
+    collidesWith(bounds, crab) {
         const _overlap = (bound1, bound2) => {
             let dx = bound1.centerX - bound2.centerX;
             let dy = bound1.centerY - bound2.centerY;
             let distance = Math.sqrt(dx * dx + dy * dy);
-            if (2*distance < bound1.radius + bound2.radius) {
+            if (1.75*distance < bound1.radius + bound2.radius) {
                 // collision detected!
                 return true;
             }    
             return false;
         };
         let collision = false;
-       
-        if (_overlap(this.bounds(), crab.bounds())) { 
+        if (_overlap(bounds, crab.bounds())) { 
             // this.resetClaw();
             collision = true; 
         };

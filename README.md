@@ -119,7 +119,7 @@ The game only has 3 controls for now.  2 arrow keys (left and right) to rotate t
         }
     }
 ```
-![movementsmoothness](https://media.giphy.com/media/f4VidcNizChHO9Zod8/giphy.gif)
+![movementsmoothness](https://media.giphy.com/media/VfzHlOZEpEEhIbkd34/giphy.gif)
 
 ### Project Design
 BottomCrab was broken down into 4 MVPs for a functional and visually appealing game.  Given the 4day timeframe to complete this project, most of the time was dedicated towards functionality and learning how to use html5 canvas.  Features to be coming in future updates: 1.  Different levels  2. Two claws

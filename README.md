@@ -45,7 +45,7 @@ All your "friend" crabs try to run away and the order is entirely randomized exc
 ```
 And here is the result
 
-![](https://media.giphy.com/media/Up887y3ChJfkSXqj35/giphy.gif)
+![gif](https://media.giphy.com/media/Up887y3ChJfkSXqj35/giphy.gif)
 
 ### Smooth keyboard controls for user
 

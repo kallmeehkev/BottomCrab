@@ -44,8 +44,8 @@ All your "friend" crabs try to run away and the order is entirely randomized exc
   }
 ```
 And here is the result
-![random movement snip](https://media.giphy.com/media/f5jvdTXpVPLKx9siRw/giphy.gif)
-https://media.giphy.com/media/f5jvdTXpVPLKx9siRw/giphy.gif
+
+![gif](https://media.giphy.com/media/Thw9wdihkhkZosbg5D/giphy.gif)
 
 ### Smooth keyboard controls for user
 
@@ -119,8 +119,7 @@ The game only has 3 controls for now.  2 arrow keys (left and right) to rotate t
         }
     }
 ```
-![movement smoothness](https://media.giphy.com/media/ekSXSOSJmbm4U4CJMk/giphy.gif)
-https://media.giphy.com/media/ekSXSOSJmbm4U4CJMk/giphy.gif
+![movementsmoothness](https://media.giphy.com/media/VfzHlOZEpEEhIbkd34/giphy.gif)
 
 ### Project Design
 BottomCrab was broken down into 4 MVPs for a functional and visually appealing game.  Given the 4day timeframe to complete this project, most of the time was dedicated towards functionality and learning how to use html5 canvas.  Features to be coming in future updates: 1.  Different levels  2. Two claws
@@ -130,3 +129,4 @@ BottomCrab was broken down into 4 MVPs for a functional and visually appealing g
 * Vanilla JS for game logic
 * HTML5 Canvas for rendering animations of cartoon crabs
 * Webpack to bundle various scripts into a single source.
+

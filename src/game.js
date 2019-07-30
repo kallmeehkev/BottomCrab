@@ -224,7 +224,6 @@ export default class Game {
     registerEvents() {
         this.ctx.canvas.addEventListener("mousedown", this.click.bind(this));
         document.addEventListener("keydown", this.keydown.bind(this));
-        // this.ctx.canvas.addEventListener("click", this.click.bind(this));
         document.addEventListener("keyup", this.keyup.bind(this));
     }
 
@@ -247,13 +246,13 @@ export default class Game {
 
     keyup(e) {
         switch (e.key) {
-            case "ArrowUp":
-                this.keys["ArrowUp"] = false;
+            case "d":
+                this.keys["d"] = false;
                 this.rightClawRetractActive = true;
                 this.rightClawActive = false;
                 break;
-            case "ArrowDown":
-                this.keys["ArrowDown"] = false;
+            case "a":
+                this.keys["a"] = false;
                 this.leftClawRetractActive = true;
                 this.leftClawActive = false;
                 break;
@@ -267,72 +266,64 @@ export default class Game {
     }
 
     keydown(e) {
-        this.peripheralCrabs.forEach(crab => {
-            if (!this.bottomCrab.rightClaw.collidesWith(this.bottomCrab.rightClaw.rightBounds(), crab)) {
-                // debugger
-                if (this.keys["ArrowUp"] && this.keys["ArrowDown"]) { //currently two keys active
-                    // debugger
+        if (this.keys["d"] && this.keys["a"]) { //currently two keys active
+            this.peripheralCrabs.forEach(crab => {
+                if (this.bottomCrab.rightClaw.collidesWith(this.bottomCrab.rightClaw.rightBounds(), crab)) {
+                    this.rightClawRetractActive = true;
+                    this.rightClawActive = false;
+                } 
+                else if (this.bottomCrab.leftClaw.collidesWith(this.bottomCrab.leftClaw.leftBounds(), crab)) {
+                    this.leftClawRetractActive = true;
+                    this.leftClawActive = false;
+                }
+                else {
+                    this.rightClawRetractActive = false;
+                    this.rightClawActive = true;
+                    this.leftClawRetractActive = false;
+                    this.leftClawActive = true;
+                }
+            });
+            this.bottomCrabActiveCW = false;
+            this.bottomCrabActiveCCW = false;
+        }
+        else {
+            switch (e.key) {
+                case "d":
+                    this.keys["d"] = true; //needed for double claw action.
                     this.peripheralCrabs.forEach(crab => {
                         if (this.bottomCrab.rightClaw.collidesWith(this.bottomCrab.rightClaw.rightBounds(), crab)) {
                             this.rightClawRetractActive = true;
                             this.rightClawActive = false;
-                        } 
-                        else if (this.bottomCrab.leftClaw.collidesWith(this.bottomCrab.leftClaw.leftBounds(), crab)) {
-                            this.leftClawRetractActive = true;
-                            this.leftClawActive = false;
-                        }
-                        else {
+                        } else {
                             this.rightClawRetractActive = false;
                             this.rightClawActive = true;
+                        }
+                    }); 
+                    this.bottomCrabActiveCW = false;
+                    this.bottomCrabActiveCCW = false;
+                    break;
+                case "a":
+                    this.keys["a"] = true;
+                    this.peripheralCrabs.forEach(crab => {
+                        if (this.bottomCrab.leftClaw.collidesWith(this.bottomCrab.leftClaw.leftBounds(), crab)) {
+                            this.leftClawRetractActive = true;
+                            this.leftClawActive = false;
+                        } else {
                             this.leftClawRetractActive = false;
                             this.leftClawActive = true;
                         }
                     });
                     this.bottomCrabActiveCW = false;
                     this.bottomCrabActiveCCW = false;
-                }
-                else {
-                    switch (e.key) {
-                        case "ArrowUp":
-                            this.keys["ArrowUp"] = true; //needed for double claw action.
-                            this.peripheralCrabs.forEach(crab => {
-                                if (this.bottomCrab.rightClaw.collidesWith(this.bottomCrab.rightClaw.rightBounds(), crab)) {
-                                    this.rightClawRetractActive = true;
-                                    this.rightClawActive = false;
-                                } else {
-                                    this.rightClawRetractActive = false;
-                                    this.rightClawActive = true;
-                                }
-                            }); 
-                            this.bottomCrabActiveCW = false;
-                            this.bottomCrabActiveCCW = false;
-                            break;
-                        case "ArrowDown":
-                            this.keys["ArrowDown"] = true;
-                            this.peripheralCrabs.forEach(crab => {
-                                if (this.bottomCrab.leftClaw.collidesWith(this.bottomCrab.leftClaw.leftBounds(), crab)) {
-                                    this.leftClawRetractActive = true;
-                                    this.leftClawActive = false;
-                                } else {
-                                    this.leftClawRetractActive = false;
-                                    this.leftClawActive = true;
-                                }
-                            });
-                            this.bottomCrabActiveCW = false;
-                            this.bottomCrabActiveCCW = false;
-                            break;
-                        case "ArrowLeft":
-                            this.bottomCrabActiveCCW = true;
-                            // this.rightClawActive = false;
-                            break;
-                        case "ArrowRight":
-                            this.bottomCrabActiveCW = true;
-                            // this.rightClawActive = false;
-                            break;
-                    }
-                }
+                    break;
+                case "ArrowLeft":
+                    this.bottomCrabActiveCCW = true;
+                    break;
+                case "ArrowRight":
+                    this.bottomCrabActiveCW = true;
+                    break;
             }
-        })
+        }
     }
 
 }

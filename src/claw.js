@@ -6,9 +6,6 @@ const CONSTANTS = {
     startDist: 45,
 }
 
-// let posX;
-// let posY;
-
 export default class Claw {
     constructor(dimensions, clawAngle, image) {
         this.dimensions = dimensions;
@@ -16,10 +13,6 @@ export default class Claw {
         this.clawRadius = CONSTANTS.clawRadius;
         this.r = CONSTANTS.startDist;
         this.pos_angle = clawAngle
-        // this.rightClawImage = new Image();
-        // this.rightClawImage.src = "./assets/images/5d30155431d42claw3.png";
-        // this.leftClawImage = new Image();
-        // this.leftClawImage.src = "./assets/images/5d30155431d42leftclaw.png";
         this.image = image;
         this.posX = 0;
         this.posY = 0;
@@ -69,24 +62,10 @@ export default class Claw {
         ctx.translate(-(this.center[0]), -(this.center[1]));
 
         ctx.translate(this.center[0] + this.posX, this.center[1] + this.posY);
-        // console.log(`right`)
-        // console.log(`X: ${this.center[0] + this.posX + (45 * Math.cos(this.pos_angle + Math.PI / 2))}`);
-        // console.log(`Y: ${this.center[1] + this.posY + (45 * Math.sin(this.pos_angle + Math.PI / 2))}`);
-        // console.log(`Angle: ${this.pos_angle * (180/Math.PI)}`);
         ctx.rotate(this.pos_angle);
         ctx.drawImage(this.image, 0, 0, 750, 1500, -45, -100, destDimen/2, destDimen)
         ctx.rotate(-(this.pos_angle));
         ctx.translate(-(this.center[0] + this.posX), -(this.center[1] + this.posY));
-
-        //#902529
-        // ctx.beginPath();
-        // ctx.arc(this.center[0] + this.posX, this.center[1] + this.posY, 40, 0, 2 * Math.PI);
-        // ctx.stroke();
-        // ctx.fillStyle = 'red';
-        // ctx.fill();
-
-        // ctx.rotate(-this.pos_angle);
-        // ctx.translate(-this.center[0], -this.center[1]);
     }
 
     drawLeftClaw(ctx) {
@@ -100,10 +79,6 @@ export default class Claw {
         ctx.translate(-(this.center[0]), -(this.center[1]));
 
         ctx.translate(this.center[0] + this.posX, this.center[1] + this.posY);
-        // console.log(`left`)
-        // console.log(`X: ${this.center[0] + this.posX + (45 * Math.cos(this.pos_angle - Math.PI / 2))}`);
-        // console.log(`Y: ${this.center[1] + this.posY + (45 * Math.sin(this.pos_angle - Math.PI / 2))}`);
-        // console.log(`Angle: ${this.pos_angle * (180/Math.PI)}`);
         ctx.rotate(this.pos_angle + Math.PI * (1 / 2));
         ctx.drawImage(this.image, 0, 0, 750, 1500, -85.5, -55, destDimen / 2, destDimen)
         ctx.rotate(-(this.pos_angle + Math.PI * (1 / 2)));
@@ -123,7 +98,6 @@ export default class Claw {
             centerY: this.center[1] + this.posY + (48 * Math.sin(this.pos_angle + Math.PI / 2)),
             radius: this.clawRadius,
         }
-        
         return bounds;
     }
 
@@ -133,7 +107,6 @@ export default class Claw {
             centerY: this.center[1] + this.posY + (48 * Math.sin(this.pos_angle - Math.PI / 2)),
             radius: this.clawRadius,
         }
-        
         return bounds;
     }
 
@@ -151,7 +124,6 @@ export default class Claw {
         };
         let collision = false;
         if (_overlap(bounds, crab.bounds())) { 
-            // this.resetClaw();
             collision = true; 
         };
         return collision;

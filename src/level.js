@@ -29,7 +29,7 @@ export default class Level {
 
     drawOceanFloor(ctx) {
         ctx.drawImage(this.oceanFloor, 0, 0, 1067, 800, 0, 0, 1067, 800);
-        ctx.drawImage(this.net, 0, 0, 575, 450, this.x, 120, 575, 450);
+        ctx.drawImage(this.net, 0, 0, 575, 450, this.x, 135, 575, 450);
         //background scroll
         if (this.x <= 90) {
             this.flowLeft = false;

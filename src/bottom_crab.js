@@ -80,12 +80,12 @@ export default class BottomCrab {
 
     animate(ctx) {
         this.drawBottomCrab(ctx)
-        this.drawGrid(ctx);
+        // this.drawGrid(ctx);
     }
 
     animateBody(ctx) {
         this.drawBottomCrabBody(ctx);
-        this.drawGrid(ctx);
+        // this.drawGrid(ctx);
     }
 
     moveBottomCrabCW() {

@@ -7,6 +7,8 @@ export default class Level {
         this.oceanFloor.src = "./assets/images/ocean-1214747_1920cropped800.jpeg";
         this.net = new Image();
         this.net.src = "./assets/images/net.png";
+        this.bucket = new Image();
+        this.bucket.src = "./assets/images/bucket.png";
     }
 
     drawBackground(ctx) {
@@ -46,6 +48,30 @@ export default class Level {
 
     animateOcean(ctx) {
         this.drawOceanFloor(ctx);
+    }
+
+    drawBucket(ctx) {
+        ctx.fillStyle = "#000000"
+        ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
+        ctx.drawImage(this.bucket, 0, 0, 967, 957, (800 - (967 * 0.7)) / 2, (800 - (957 * 0.7))/2, 967*0.7, 957*0.7);
+    }
+
+    animateBucket(ctx) {
+        this.drawBucket(ctx);
+    }
+
+    drawDarkness(ctx, off) {
+        if (off) {
+            debugger
+            ctx.fillStyle = "rgba(0,0,0,0.88)"
+        } else {
+            ctx.fillStyle = "rgba(0,0,0,0.5)"
+        }
+        ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
+    }
+
+    animateDarkness(ctx, off) {
+        this.drawDarkness(ctx, off);
     }
 
 }

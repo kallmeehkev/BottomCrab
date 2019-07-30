@@ -93,3 +93,14 @@ export const drawScore = (ctx, score) => {
     ctx.lineWidth = 1;
     ctx.strokeText(score, loc.x, loc.y);
 }
+
+export const drawFinalScore = (ctx, score) => {
+    // if (this.score > 10000) this.score = 0;
+    const loc = { x: 600, y: 775 };
+    ctx.font = "bold 20pt Bangers";
+    ctx.fillStyle = "white";
+    ctx.fillText(`Final Score: ${score}`, loc.x, loc.y);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.strokeText(`Final Score: ${score}`, loc.x, loc.y);
+}

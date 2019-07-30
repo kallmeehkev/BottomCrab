@@ -2,15 +2,15 @@ import Level from './level';
 import BottomCrab from './bottom_crab';
 import PeripheralCrab from './peripheral_crab';
 import { drawTimer, drawLostText, drawWinText,
-    drawTitle, drawScore, 
+    drawTitle, drawScore, drawFinalScore,
     drawReplay, replayButton, drawStart,
     getMousePos, isInside } from './draw_extra_stuff';
 
 const CONSTANTS = {
     escape: 30,
-    duration: 1000, //ms
+    duration: 2000, //ms
     startDelay: 1000, //ms
-    moveDelay: 1000, //ms
+    moveDelay: 2000, //ms
     outerBound: 325,
     level1: 60000,     //ms for level1 time length
     level2: 45000,
@@ -54,6 +54,7 @@ export default class Game {
                 // this.restart();
                 drawWinText(this.ctx);
                 drawReplay(this.ctx);
+                drawFinalScore(this.ctx, this.score);
                 this.running = false;
             }
             if (this.gameLost()) {
@@ -61,30 +62,30 @@ export default class Game {
                 this.ctx.drawImage(this.loseSplash, 0, 0, 1024, 808, 16, 125, 768, 606)
                 drawLostText(this.ctx);
                 drawReplay(this.ctx);
+                drawFinalScore(this.ctx, this.score);
                 this.running = false;
             }
             if (this.running) {
-                this.level.animate(this.ctx);
-                this.level.animateOcean(this.ctx);
+                // this.level.animate(this.ctx);
+                // this.level.animateOcean(this.ctx);
+                this.level.animateBucket(this.ctx);
+
                 this.peripheralCrabs.forEach(crab => {
                     crab.animate(this.ctx);
                     if (this.bottomCrab.rightClaw.collidesWith(this.bottomCrab.rightClaw.rightBounds(), crab)) {
-                        this.rightClawActive = false;
-                        this.rightClawRetractActive = true;
+                        this.rightClawRetractTog()
                         this.crabScore += Math.floor(crab.r/100);
                         this.pullPeripheralCrab(crab);
                     }
                     if (this.bottomCrab.leftClaw.collidesWith(this.bottomCrab.leftClaw.leftBounds(), crab)) {
-                        this.leftClawActive = false;
-                        this.leftClawRetractActive = true;
+                        this.leftClawRetractTog()
                         this.crabScore += Math.floor(crab.r/100);
                         this.pullPeripheralCrab(crab);
                     }
                 });
+
                 if (this.rightClawActive || this.rightClawRetractActive || this.leftClawActive || this.leftClawRetractActive ) {
-                    this.bottomCrab.rightClaw.animateRight(this.ctx);
-                    this.bottomCrab.leftClaw.animateLeft(this.ctx);
-                    this.bottomCrab.animateBody(this.ctx);
+                    this.animateCrabWithClaws();
                 } else {
                     this.bottomCrab.animate(this.ctx);
                 }
@@ -93,6 +94,12 @@ export default class Game {
                 drawScore(this.ctx, this.score);
 
                 requestAnimationFrame(this.animate.bind(this));
+                if (this.bottomCrabActiveCW || this.bottomCrabActiveCCW) {
+                    this.moveBottomCrab();
+                }
+                if (this.rightClawActive || this.rightClawRetractActive || this.leftClawActive || this.leftClawRetractActive ) {
+                    this.moveClaw();
+                }
                 timestamp = new Date().getTime();
                 this.score = Math.floor((timestamp - bufferStart) / 1000) + this.crabScore;
                 this.timer = CONSTANTS.level1 - (timestamp - bufferStart);
@@ -100,12 +107,7 @@ export default class Game {
                 let buffered = timestamp - bufferStart > CONSTANTS.startDelay;
                 let moveDelayed = timestamp - interval > CONSTANTS.moveDelay;
                 let differentCrab = lastrandom !== random;
-                if (this.bottomCrabActiveCW || this.bottomCrabActiveCCW) {
-                    this.moveBottomCrab();
-                }
-                if (this.rightClawActive || this.rightClawRetractActive || this.leftClawActive || this.leftClawRetractActive ) {
-                    this.moveClaw();
-                }
+                this.level.animateDarkness(this.ctx, this.darkness);                    
                 if (buffered && moveDelayed && differentCrab ) { //buffer time before crabs start moving out
                     this.movePeripheralCrab(timestamp, random, CONSTANTS.duration);
                 } else {
@@ -113,6 +115,12 @@ export default class Game {
                 }
             }
         }
+    }
+
+    animateCrabWithClaws() {
+        this.bottomCrab.rightClaw.animateRight(this.ctx);
+        this.bottomCrab.leftClaw.animateLeft(this.ctx);
+        this.bottomCrab.animateBody(this.ctx);
     }
 
     moveBottomCrab() {
@@ -149,7 +157,9 @@ export default class Game {
         starttime = interval + CONSTANTS.moveDelay;
         if ((timestamp - starttime) <= duration) {
             this.peripheralCrabs[i].moveOut();
+            this.darkness = false;
         } else {
+            this.darkness = true;
             interval = timestamp;
             lastrandom = i;
             random = Math.floor(Math.random() * 8);
@@ -182,6 +192,7 @@ export default class Game {
         this.leftClawRetractActive = false;
         this.bottomCrabActiveCW = false;
         this.bottomCrabActiveCCW = false;
+        this.darkness = true;
         this.score = 0;
         this.crabScore = 0;
         this.timer = 0;
@@ -210,6 +221,26 @@ export default class Game {
         let minutes = Math.floor(this.timer / 60000);
         let seconds = Math.ceil((this.timer % 60000)/1000);
         return seconds >= 10 ? `${minutes}:${seconds}` : `${minutes}:0${seconds}`
+    }
+
+    rightClawTog() {
+        this.rightClawRetractActive = false;
+        this.rightClawActive = true;
+    }
+
+    rightClawRetractTog() {
+        this.rightClawRetractActive = true;
+        this.rightClawActive = false;
+    }
+
+    leftClawTog() {
+        this.leftClawRetractActive = false;
+        this.leftClawActive = true;
+    }
+
+    leftClawRetractTog() {
+        this.leftClawRetractActive = true;
+        this.leftClawActive = false;
     }
 
     play() {
@@ -248,13 +279,11 @@ export default class Game {
         switch (e.key) {
             case "d":
                 this.keys["d"] = false;
-                this.rightClawRetractActive = true;
-                this.rightClawActive = false;
+                this.rightClawRetractTog();
                 break;
             case "a":
                 this.keys["a"] = false;
-                this.leftClawRetractActive = true;
-                this.leftClawActive = false;
+                this.leftClawRetractTog();
                 break;
             case "ArrowLeft":
                 this.bottomCrabActiveCCW = false;
@@ -269,18 +298,14 @@ export default class Game {
         if (this.keys["d"] && this.keys["a"]) { //currently two keys active
             this.peripheralCrabs.forEach(crab => {
                 if (this.bottomCrab.rightClaw.collidesWith(this.bottomCrab.rightClaw.rightBounds(), crab)) {
-                    this.rightClawRetractActive = true;
-                    this.rightClawActive = false;
+                    this.rightClawRetractTog();
                 } 
                 else if (this.bottomCrab.leftClaw.collidesWith(this.bottomCrab.leftClaw.leftBounds(), crab)) {
-                    this.leftClawRetractActive = true;
-                    this.leftClawActive = false;
+                    this.leftClawRetractTog();
                 }
                 else {
-                    this.rightClawRetractActive = false;
-                    this.rightClawActive = true;
-                    this.leftClawRetractActive = false;
-                    this.leftClawActive = true;
+                    this.rightClawTog();
+                    this.leftClawTog();
                 }
             });
             this.bottomCrabActiveCW = false;
@@ -292,11 +317,9 @@ export default class Game {
                     this.keys["d"] = true; //needed for double claw action.
                     this.peripheralCrabs.forEach(crab => {
                         if (this.bottomCrab.rightClaw.collidesWith(this.bottomCrab.rightClaw.rightBounds(), crab)) {
-                            this.rightClawRetractActive = true;
-                            this.rightClawActive = false;
+                            this.rightClawRetractTog();
                         } else {
-                            this.rightClawRetractActive = false;
-                            this.rightClawActive = true;
+                            this.rightClawTog();
                         }
                     }); 
                     this.bottomCrabActiveCW = false;
@@ -306,11 +329,9 @@ export default class Game {
                     this.keys["a"] = true;
                     this.peripheralCrabs.forEach(crab => {
                         if (this.bottomCrab.leftClaw.collidesWith(this.bottomCrab.leftClaw.leftBounds(), crab)) {
-                            this.leftClawRetractActive = true;
-                            this.leftClawActive = false;
+                            this.leftClawRetractTog();
                         } else {
-                            this.leftClawRetractActive = false;
-                            this.leftClawActive = true;
+                            this.leftClawTog();
                         }
                     });
                     this.bottomCrabActiveCW = false;

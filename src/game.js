@@ -1,10 +1,8 @@
 import Level from './level';
 import BottomCrab from './bottom_crab';
 import PeripheralCrab from './peripheral_crab';
-import { drawTimer, drawLostText, drawWinText,
-    drawTitle, drawScore, drawFinalScore,
-    drawReplay, replayButton, drawStart,
-    getMousePos, isInside } from './draw_extra_stuff';
+import { drawTimer, drawLostText, drawWinText, drawTitle, drawScore, drawFinalScore,
+    drawReplay, replayButton, drawStart, getMousePos, isInside } from './draw_extra_stuff';
 
 const CONSTANTS = {
     escape: 30,
@@ -48,21 +46,11 @@ export default class Game {
             drawStart(this.ctx);
         } else {
             if (this.gameWon()) {
-                this.level.animateWon(this.ctx);
-                this.ctx.drawImage(this.winSplash, 0, 0, 1200, 2400, 250, 75, 315, 630)
-                // console.log("You're the bottomest of BottomCrabs!");
-                // this.restart();
-                drawWinText(this.ctx);
-                drawReplay(this.ctx);
-                drawFinalScore(this.ctx, this.score);
+                this.drawWonScreen();
                 this.running = false;
             }
             if (this.gameLost()) {
-                this.level.animate(this.ctx);
-                this.ctx.drawImage(this.loseSplash, 0, 0, 1024, 808, 16, 125, 768, 606)
-                drawLostText(this.ctx);
-                drawReplay(this.ctx);
-                drawFinalScore(this.ctx, this.score);
+                this.drawLostScreen();
                 this.running = false;
             }
             if (this.running) {
@@ -86,6 +74,7 @@ export default class Game {
 
                 if (this.rightClawActive || this.rightClawRetractActive || this.leftClawActive || this.leftClawRetractActive ) {
                     this.animateCrabWithClaws();
+                    this.moveClaw();
                 } else {
                     this.bottomCrab.animate(this.ctx);
                 }
@@ -97,9 +86,6 @@ export default class Game {
                 if (this.bottomCrabActiveCW || this.bottomCrabActiveCCW) {
                     this.moveBottomCrab();
                 }
-                if (this.rightClawActive || this.rightClawRetractActive || this.leftClawActive || this.leftClawRetractActive ) {
-                    this.moveClaw();
-                }
                 timestamp = new Date().getTime();
                 this.score = Math.floor((timestamp - bufferStart) / 1000) + this.crabScore;
                 this.timer = CONSTANTS.level1 - (timestamp - bufferStart);
@@ -107,7 +93,8 @@ export default class Game {
                 let buffered = timestamp - bufferStart > CONSTANTS.startDelay;
                 let moveDelayed = timestamp - interval > CONSTANTS.moveDelay;
                 let differentCrab = lastrandom !== random;
-                this.level.animateDarkness(this.ctx, this.darkness);                    
+
+                this.level.animateLid(this.ctx);                    
                 if (buffered && moveDelayed && differentCrab ) { //buffer time before crabs start moving out
                     this.movePeripheralCrab(timestamp, random, CONSTANTS.duration);
                 } else {
@@ -157,9 +144,7 @@ export default class Game {
         starttime = interval + CONSTANTS.moveDelay;
         if ((timestamp - starttime) <= duration) {
             this.peripheralCrabs[i].moveOut();
-            this.darkness = false;
         } else {
-            this.darkness = true;
             interval = timestamp;
             lastrandom = i;
             random = Math.floor(Math.random() * 8);
@@ -192,7 +177,7 @@ export default class Game {
         this.leftClawRetractActive = false;
         this.bottomCrabActiveCW = false;
         this.bottomCrabActiveCCW = false;
-        this.darkness = true;
+        this.Lid = true;
         this.score = 0;
         this.crabScore = 0;
         this.timer = 0;
@@ -207,6 +192,22 @@ export default class Game {
             if( crab.r > CONSTANTS.outerBound) gameover = true
         })
         return gameover;
+    }
+
+    drawLostScreen() {
+        this.level.animate(this.ctx);
+        this.ctx.drawImage(this.loseSplash, 0, 0, 1024, 808, 16, 125, 768, 606)
+        drawLostText(this.ctx);
+        drawReplay(this.ctx);
+        drawFinalScore(this.ctx, this.score);
+    }
+
+    drawWonScreen() {
+        this.level.animateWon(this.ctx);
+        this.ctx.drawImage(this.winSplash, 0, 0, 1200, 2400, 250, 75, 315, 630)
+        drawWinText(this.ctx);
+        drawReplay(this.ctx);
+        drawFinalScore(this.ctx, this.score);
     }
 
     gameWon() {

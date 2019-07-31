@@ -1,6 +1,6 @@
 const CONSTANTS = {
     startDist: 140,
-    speed: 1.2,
+    speed: 0.6,
     bodyRadius: 40,
     pulledInSpeed: 3.2,
 }

@@ -1,17 +1,19 @@
 import Level from './level';
 import BottomCrab from './bottom_crab';
 import PeripheralCrab from './peripheral_crab';
-import { drawTimer, drawLostText, drawWinText, drawTitle, drawScore, drawFinalScore,
-    drawReplay, replayButton, drawStart, getMousePos, isInside } from './draw_extra_stuff';
+import { drawTimer, drawLostText, drawWinText, drawTitle, drawScore, drawFinalScore, drawNextStageButton,
+    drawReplayButton, replayButton, drawStartButton, getMousePos, isInside,
+    drawPostLevel1Text } from './draw_extra_stuff';
 
 const CONSTANTS = {
     escape: 30,
-    duration: 2000, //ms
+    duration1: 1000,
+    duration2: 2000, //ms
     startDelay: 1000, //ms
     moveDelay: 2000, //ms
     outerBound: 325,
-    level1: 60000,     //ms for level1 time length
-    level2: 45000,
+    level1: 6000,     //ms for level1 time length
+    level2: 4500,
     level3: 30000,
     PeripheralCrabStartDist: 140,
 }
@@ -22,6 +24,7 @@ let lastrandom = 8;
 let timestamp = 0;
 let bufferStart = 0;
 let interval = 0;
+let duration;
 
 export default class Game {
     constructor(canvas) {
@@ -34,30 +37,49 @@ export default class Game {
         this.loseSplash.src = "./assets/images/BottomCrab loseSplash.png";
         this.initialSplash = new Image();
         this.initialSplash.src = "./assets/images/CrabBucketEffect.jpg"
-        this.keys = {};
         this.restart();
     }
 
     animate() {
         if (!this.running) {
-            this.level.animate(this.ctx);
-            this.ctx.drawImage(this.initialSplash, 0, 0, 650, 526, 75, this.dimensions.height - 526 - 100, 650, 526)            
-            drawTitle(this.ctx);
-            drawStart(this.ctx);
+            this.drawInitialSplash();
         } else {
-            if (this.gameWon()) {
+            if (this.gameWon(CONSTANTS.level2) && this.stage === 2) {
                 this.drawWonScreen();
                 this.running = false;
             }
-            if (this.gameLost()) {
+            else if (this.gameLost()) {
                 this.drawLostScreen();
                 this.running = false;
             }
-            if (this.running) {
-                // this.level.animate(this.ctx);
-                // this.level.animateOcean(this.ctx);
-                this.level.animateBucket(this.ctx);
-
+            else if (this.gameWon(CONSTANTS.level1) && this.stage === 1) {
+                this.stage = 2;
+                this.betweenLevels = true;
+            }
+            if (this.betweenLevels) {
+                this.level.animate(this.ctx);
+                drawPostLevel1Text(this.ctx);
+                drawNextStageButton(this.ctx);
+            } 
+            if (this.running && !this.betweenLevels) {
+                requestAnimationFrame(this.animate.bind(this));
+                timestamp = new Date().getTime();
+                switch(this.stage) {
+                    case 1:
+                        duration = CONSTANTS.duration1;
+                        this.level.animateOcean(this.ctx);
+                        this.timer = CONSTANTS.level1 - (timestamp - bufferStart);
+                        break;
+                    case 2:
+                        duration = CONSTANTS.duration2;
+                        this.level2PeripheralCrabMechanics();
+                        this.level.animateBucket(this.ctx);
+                        this.timer = CONSTANTS.level2 - (timestamp - bufferStart);
+                        break;
+                    default:
+                        this.level.animate(this.ctx);
+                        break;
+                }
                 this.peripheralCrabs.forEach(crab => {
                     crab.animate(this.ctx);
                     if (this.bottomCrab.rightClaw.collidesWith(this.bottomCrab.rightClaw.rightBounds(), crab)) {
@@ -78,25 +100,22 @@ export default class Game {
                 } else {
                     this.bottomCrab.animate(this.ctx);
                 }
+                if (this.stage === 2) this.level.animateLid(this.ctx);    
 
                 drawTimer(this.ctx, this.countdown());
                 drawScore(this.ctx, this.score);
 
-                requestAnimationFrame(this.animate.bind(this));
                 if (this.bottomCrabActiveCW || this.bottomCrabActiveCCW) {
                     this.moveBottomCrab();
                 }
-                timestamp = new Date().getTime();
-                this.score = Math.floor((timestamp - bufferStart) / 1000) + this.crabScore;
-                this.timer = CONSTANTS.level1 - (timestamp - bufferStart);
+
+                this.score = this.crabScore; //+ Math.floor((timestamp - bufferStart) / 1000);
 
                 let buffered = timestamp - bufferStart > CONSTANTS.startDelay;
                 let moveDelayed = timestamp - interval > CONSTANTS.moveDelay;
                 let differentCrab = lastrandom !== random;
-
-                this.level.animateLid(this.ctx);                    
                 if (buffered && moveDelayed && differentCrab ) { //buffer time before crabs start moving out
-                    this.movePeripheralCrab(timestamp, random, CONSTANTS.duration);
+                    this.movePeripheralCrab(timestamp, random, duration);
                 } else {
                     random = Math.floor(Math.random() * 8);
                 }
@@ -151,6 +170,10 @@ export default class Game {
         }
     }
 
+    level2PeripheralCrabMechanics() {
+        this.peripheralCrabs.forEach( crab => crab.speed = 0.6)
+    }
+
     pullPeripheralCrab(crab) {
         if (crab.r >= CONSTANTS.PeripheralCrabStartDist) {
             crab.pulledIn();
@@ -184,6 +207,15 @@ export default class Game {
         timestamp = 0;
         bufferStart = 0;
         interval = 0;
+        this.stage = 1;
+        this.keys = {};
+    }
+
+    drawInitialSplash() {
+        this.level.animate(this.ctx);
+        this.ctx.drawImage(this.initialSplash, 0, 0, 650, 526, 75, this.dimensions.height - 526 - 100, 650, 526)
+        drawTitle(this.ctx);
+        drawStartButton(this.ctx);
     }
 
     gameLost() {
@@ -198,7 +230,7 @@ export default class Game {
         this.level.animate(this.ctx);
         this.ctx.drawImage(this.loseSplash, 0, 0, 1024, 808, 16, 125, 768, 606)
         drawLostText(this.ctx);
-        drawReplay(this.ctx);
+        drawReplayButton(this.ctx);
         drawFinalScore(this.ctx, this.score);
     }
 
@@ -206,13 +238,13 @@ export default class Game {
         this.level.animateWon(this.ctx);
         this.ctx.drawImage(this.winSplash, 0, 0, 1200, 2400, 250, 75, 315, 630)
         drawWinText(this.ctx);
-        drawReplay(this.ctx);
+        drawReplayButton(this.ctx);
         drawFinalScore(this.ctx, this.score);
     }
 
-    gameWon() {
+    gameWon(levelDuration) {
         let gameover = false;
-        if ((timestamp - bufferStart) > CONSTANTS.level1) {
+        if ((timestamp - bufferStart) > levelDuration) {
             gameover = true;
         } 
         return gameover;
@@ -261,19 +293,24 @@ export default class Game {
 
     click(e) {
         let mousePos = getMousePos(this.ctx.canvas, e);
-        if (!this.running) {
-            let rect = {
-                x: replayButton.x * 0.8,
-                y: replayButton.y * 0.8,
-                w: replayButton.w * 0.8,
-                h: replayButton.h * 0.8,
-            };
-            if (isInside(mousePos, rect)) {
+        let rect = {
+            x: replayButton.x * 0.8,
+            y: replayButton.y * 0.8,
+            w: replayButton.w * 0.8,
+            h: replayButton.h * 0.8,
+        };
+        if (isInside(mousePos, rect)) {
+            if (!this.running) {
                 this.restart();
                 this.play();
-            } else {
+            } else if (this.betweenLevels){
+                this.betweenLevels = false;
+                timestamp = new Date().getTime();
+                bufferStart = timestamp;
+                this.animate();
             }    
         }
+        
     }    
 
     keyup(e) {

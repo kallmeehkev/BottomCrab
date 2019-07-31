@@ -1,6 +1,5 @@
 const CONSTANTS = {
     startDist: 140,
-    speed: 0.6,
     bodyRadius: 40,
     pulledInSpeed: 3.2,
 }
@@ -14,6 +13,7 @@ export default class PeripheralCrab {
         this.pos_angle = (22.5 * Math.PI / 180);
         this.PeripheralCrab = new Image();
         this.PeripheralCrab.src = "./assets/images/PeripheralCrab.png";
+        this.speed = 1.2;
     }
 
     drawPeripheralCrab(ctx) {
@@ -36,7 +36,7 @@ export default class PeripheralCrab {
     }
 
     moveOut() {
-        this.r += CONSTANTS.speed;
+        this.r += this.speed;
     }
 
     pulledIn() {

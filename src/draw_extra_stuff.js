@@ -5,7 +5,8 @@ export const replayButton = {
     h: 60
 }
 
-export const drawReplay = (ctx) => {
+
+export const drawReplayButton = (ctx) => {
     ctx.strokeStyle = "black";
     ctx.lineWidth = "5";
     ctx.strokeRect(replayButton.x, replayButton.y, replayButton.w, replayButton.h);
@@ -18,7 +19,7 @@ export const drawReplay = (ctx) => {
     ctx.fillText("Replay", 360, replayButton.y + (0.5*replayButton.h) + 12); //12 is half font size
 }
 
-export const drawStart = (ctx) => {
+export const drawStartButton = (ctx) => {
     ctx.strokeStyle = "black";
     ctx.lineWidth = "5";
     ctx.strokeRect(replayButton.x, replayButton.y, replayButton.w, replayButton.h);
@@ -29,6 +30,19 @@ export const drawStart = (ctx) => {
     ctx.fillStyle = "black";
     ctx.font = "24pt Bangers";
     ctx.fillText("Start", 365, replayButton.y + (0.5*replayButton.h) + 12);
+}
+
+export const drawNextStageButton = (ctx) => {
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = "5";
+    ctx.strokeRect(replayButton.x, replayButton.y, replayButton.w, replayButton.h);
+
+    ctx.fillStyle = "#ffeb00";
+    ctx.fillRect(replayButton.x, replayButton.y, replayButton.w, replayButton.h);
+
+    ctx.fillStyle = "black";
+    ctx.font = "24pt Bangers";
+    ctx.fillText("Next Stage", 340, replayButton.y + (0.5*replayButton.h) + 12);
 }
 
 export const getMousePos = (canvas, event) => {
@@ -71,6 +85,31 @@ export const drawWinText = (ctx) => {
     ctx.strokeStyle = "black";
     ctx.lineWidth = 1;
     ctx.strokeText("You're the bottomest of BottomCrabs!", loc.x, loc.y);
+}
+
+export const drawPostLevel1Text = (ctx) => {
+    let postLevel1Text1 = "Nicely done..."
+    let postLevel1Text2 = "You've brought along all your crab friends for all the fun ahead."
+    let postLevel1Text3 = "Now get ready for Stage2.  Keep them from escaping the bucket!"
+    const loc = { x: 50, y: 50 };
+    ctx.font = "bold 22pt Bangers";
+    ctx.fillStyle = "white";
+    ctx.fillText(postLevel1Text1, loc.x, loc.y);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.strokeText(postLevel1Text1, loc.x, loc.y);
+    ctx.font = "bold 22pt Bangers";
+    ctx.fillStyle = "white";
+    ctx.fillText(postLevel1Text2, loc.x, loc.y + 30);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.strokeText(postLevel1Text2, loc.x, loc.y + 30);
+    ctx.font = "bold 22pt Bangers";
+    ctx.fillStyle = "white";
+    ctx.fillText(postLevel1Text3, loc.x, loc.y + 60);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.strokeText(postLevel1Text3, loc.x, loc.y + 60);
 }
 
 export const drawTitle = (ctx) => {

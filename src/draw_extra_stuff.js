@@ -63,7 +63,7 @@ export const drawTimer = (ctx, countdown) => {
     ctx.fillStyle = "white";
     ctx.fillText(countdown, loc.x, loc.y);
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 0.5;
     ctx.strokeText(countdown, loc.x, loc.y);
 }
 
@@ -73,7 +73,7 @@ export const drawLostText = (ctx) => {
     ctx.fillStyle = "white";
     ctx.fillText("You're not BottomCrab enough!", loc.x, loc.y);
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 0.5;
     ctx.strokeText("You're not BottomCrab enough!", loc.x, loc.y);
 }
 
@@ -83,7 +83,7 @@ export const drawWinText = (ctx) => {
     ctx.fillStyle = "white";
     ctx.fillText("You're the bottomest of BottomCrabs!", loc.x, loc.y);
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 0.5;
     ctx.strokeText("You're the bottomest of BottomCrabs!", loc.x, loc.y);
 }
 
@@ -96,20 +96,20 @@ export const drawPostLevel1Text = (ctx) => {
     ctx.fillStyle = "white";
     ctx.fillText(postLevel1Text1, loc.x, loc.y);
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 0.5;
     ctx.strokeText(postLevel1Text1, loc.x, loc.y);
     ctx.font = "bold 22pt Bangers";
     ctx.fillStyle = "white";
-    ctx.fillText(postLevel1Text2, loc.x, loc.y + 30);
+    ctx.fillText(postLevel1Text2, loc.x, loc.y + 40);
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
-    ctx.strokeText(postLevel1Text2, loc.x, loc.y + 30);
+    ctx.lineWidth = 0.5;
+    ctx.strokeText(postLevel1Text2, loc.x, loc.y + 40);
     ctx.font = "bold 22pt Bangers";
     ctx.fillStyle = "white";
-    ctx.fillText(postLevel1Text3, loc.x, loc.y + 60);
+    ctx.fillText(postLevel1Text3, loc.x, loc.y + 80);
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
-    ctx.strokeText(postLevel1Text3, loc.x, loc.y + 60);
+    ctx.lineWidth = 0.5;
+    ctx.strokeText(postLevel1Text3, loc.x, loc.y + 80);
 }
 
 export const drawTitle = (ctx) => {
@@ -118,7 +118,7 @@ export const drawTitle = (ctx) => {
     ctx.fillStyle = "white";
     ctx.fillText("How BottomCrab are you!?", loc.x, loc.y);
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 0.5;
     ctx.strokeText("How BottomCrab are you!?", loc.x, loc.y);
 }
 
@@ -129,7 +129,7 @@ export const drawScore = (ctx, score) => {
     ctx.fillStyle = "white";
     ctx.fillText(score, loc.x, loc.y);
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 0.5;
     ctx.strokeText(score, loc.x, loc.y);
 }
 
@@ -140,6 +140,6 @@ export const drawFinalScore = (ctx, score) => {
     ctx.fillStyle = "white";
     ctx.fillText(`Final Score: ${score}`, loc.x, loc.y);
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 0.5;
     ctx.strokeText(`Final Score: ${score}`, loc.x, loc.y);
 }

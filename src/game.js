@@ -12,8 +12,8 @@ const CONSTANTS = {
     startDelay: 1000, //ms
     moveDelay: 2000, //ms
     outerBound: 325,
-    level1: 6000,     //ms for level1 time length
-    level2: 4500,
+    level1: 60000,     //ms for level1 time length
+    level2: 45000,
     level3: 30000,
     PeripheralCrabStartDist: 140,
 }

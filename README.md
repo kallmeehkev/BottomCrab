@@ -158,8 +158,44 @@ keydown(e) {
 ```
 ![movementsmoothness](https://media.giphy.com/media/S5o8drNIZsoZvtw9P4/giphy.gif)
 
+### Different Levels
+
+There are currently 2/3 levels implemented, each fitting the crabs in a bucket motif and each more challenging than the level before.  A simple interpolation created the shadow effect as the lid goes on and off.  
+
+```js
+    drawLid(ctx) {
+        ctx.fillStyle = `rgba(0,0,0,${this.lidX / 400 - 0.12})`
+        ctx.beginPath();
+        ctx.arc(400, 415, 307, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = "rgba(210,37,41,1)"
+        ctx.beginPath();
+        ctx.arc(this.lidX, 415, 307, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.fill();
+        if (this.lidX <= -500) {
+            this.lidOff = false;
+        }
+        if (this.lidX >= 400) {
+            this.lidOff = true;
+        }
+        if (this.lidOff) {
+            setTimeout(() => {
+                this.lidX -= 2
+            }, 1000)
+        } else {
+            if (this.lidX < 400) this.lidX += 10;
+        }
+    }
+```
+
+![gif](https://media.giphy.com/media/Tfv7t1Gl2daQFYLxwB/giphy.gif)
+
+
 ### Project Design
-BottomCrab was broken down into 4 MVPs for a functional and visually appealing game.  Given the 4day timeframe to complete this project, most of the time was dedicated towards functionality and learning how to use html5 canvas.  Features to be coming in future updates: 1.  Different levels  2. Two claws
+BottomCrab was broken down into 4 MVPs for a functional and visually appealing game.  Given the 4day timeframe to complete this project, most of the time was dedicated towards functionality and learning how to use html5 canvas.  Features to be coming in future updates: 3rd and final level with different game mechanics
 
 ## Technologies
 

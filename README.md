@@ -1,5 +1,7 @@
 # BottomCrab
 
+[Live](https://kallmeehkev.github.io/BottomCrab/)
+
 This game was inspired by my interactions with my close group of friends.  This would be a saying any time one of us tries to stop another from coming ahead on anything. Enjoy.
 
 BottomCrab is a simple game constructed with vanilla Javascript and HTML5 canvas for rendering. The goal of the game is to keep all the crabs from climbing out of the bucket by grabbing them with your claws to pull them back. The longer you can keep any crabs from leaving the bucket the higher your score. You also accumulate much more points the further out a crab is when you pull them back in. The game is over once one crab leaves the bucket.

@@ -53,71 +53,106 @@ And here is the result
 
 The game has 4 controls.  2 arrow keys (left and right) to rotate the BottomCrab and 'a' and 'd' keys to extend each claw.  Initially, movement was choppy where each button press resulted in a quick 45deg turn.  Holding down the up arrow did extend the claw, but the DOM has a slight buffer time to differentiate between a long key stroke and an actual hold down.  I resolved these two issues by using booleans for each action.  Each keydown event would flip the boolean run the appropriate movement function.  Each keyup would flip back the boolean and stop the motion.  This resolved the choppy looking movement, while also simulating a holddown key press.  The result is shown below.
 ```js
-    keyup(e) {
-        switch (e.key) {
-            case "ArrowUp":
-                this.clawRetractActive = true;
-                this.clawActive = false;
-                break;
-            case "ArrowLeft":
-                this.bottomCrabActiveCCW = false;
-                break;
-            case "ArrowRight":
-                this.bottomCrabActiveCW = false;
-                break;
-        }
-    }
+keyup(e) {
+  switch (e.key) {
+      case "d":
+          this.keys["d"] = false;
+          this.rightClawRetractTog();
+          break;
+      case "a":
+          this.keys["a"] = false;
+          this.leftClawRetractTog();
+          break;
+      case "ArrowLeft":
+          this.bottomCrabActiveCCW = false;
+          break;
+      case "ArrowRight":
+          this.bottomCrabActiveCW = false;
+          break;
+  }
+}
 
-    keydown(e) {
-        this.peripheralCrabs.forEach(crab => {
-            if (!this.bottomCrab.claw.collidesWith(crab)) {
-                switch (e.key) {
-                    case "ArrowUp":
-                        this.peripheralCrabs.forEach(crab => {
-                            if (this.bottomCrab.claw.collidesWith(crab)) {
-                                this.clawRetractActive = true;
-                                this.clawActive = false;
-                            } else {
-                                this.clawRetractActive = false;
-                                this.clawActive = true;
-                            }
-                        }); 
-                        this.bottomCrabActiveCW = false;
-                        this.bottomCrabActiveCCW = false;
-                        break;
-                    case "ArrowLeft":
-                        this.bottomCrabActiveCCW = true;
-                        this.clawActive = false;
-                        break;
-                    case "ArrowRight":
-                        this.bottomCrabActiveCW = true;
-                        this.clawActive = false;
-                        break;
-                    // case "ArrowDown":
-                    //     this.clawActive = true;
-                    //     this.bottomCrab.claw.retractClaw();
-                    //     break;
+keydown(e) {
+        if (this.keys["d"] && this.keys["a"]) { //currently two keys active
+            this.peripheralCrabs.forEach(crab => {
+                if (this.bottomCrab.rightClaw.collidesWith(this.bottomCrab.rightClaw.rightBounds(), crab)) {
+                    this.rightClawRetractTog();
+                } 
+                else if (this.bottomCrab.leftClaw.collidesWith(this.bottomCrab.leftClaw.leftBounds(), crab)) {
+                    this.leftClawRetractTog();
                 }
+                else {
+                    this.rightClawTog();
+                    this.leftClawTog();
+                }
+            });
+            this.bottomCrabActiveCW = false;
+            this.bottomCrabActiveCCW = false;
+        }
+        else {
+            switch (e.key) {
+                case "d":
+                    this.keys["d"] = true; //needed for double claw action.
+                    this.peripheralCrabs.forEach(crab => {
+                        if (this.bottomCrab.rightClaw.collidesWith(this.bottomCrab.rightClaw.rightBounds(), crab)) {
+                            this.rightClawRetractTog();
+                        } else {
+                            this.rightClawTog();
+                        }
+                    }); 
+                    this.bottomCrabActiveCW = false;
+                    this.bottomCrabActiveCCW = false;
+                    break;
+                case "a":
+                    this.keys["a"] = true;
+                    this.peripheralCrabs.forEach(crab => {
+                        if (this.bottomCrab.leftClaw.collidesWith(this.bottomCrab.leftClaw.leftBounds(), crab)) {
+                            this.leftClawRetractTog();
+                        } else {
+                            this.leftClawTog();
+                        }
+                    });
+                    this.bottomCrabActiveCW = false;
+                    this.bottomCrabActiveCCW = false;
+                    break;
+                case "ArrowLeft":
+                    this.bottomCrabActiveCCW = true;
+                    break;
+                case "ArrowRight":
+                    this.bottomCrabActiveCW = true;
+                    break;
             }
-        })
+        }
     }
 ```
 ```js
     moveBottomCrab() {
         if (this.bottomCrabActiveCW) {
             this.bottomCrab.moveBottomCrabCW();
+            this.bottomCrab.rightClaw.moveClaw();
+            this.bottomCrab.leftClaw.moveClaw();
         }
         if (this.bottomCrabActiveCCW) {
             this.bottomCrab.moveBottomCrabCCW();
+            this.bottomCrab.rightClaw.moveClaw();
+            this.bottomCrab.leftClaw.moveClaw();
         }
     }
 
     moveClaw() {
-        if (this.clawActive) {
-            this.bottomCrab.claw.extendClaw();
-        } else {
-            this.bottomCrab.claw.retractClaw();
-            if (this.bottomCrab.claw.r <= 73) this.clawRetractActive = false;
+        if (this.rightClawActive) {
+            this.bottomCrab.rightClaw.extendRightClaw();
+            this.bottomCrab.leftClaw.moveClaw();
+        } if (this.rightClawRetractActive) {
+            this.bottomCrab.rightClaw.retractClaw();
+            if (this.bottomCrab.rightClaw.r < 48) this.rightClawRetractActive = false;
+        } 
+        if (this.leftClawActive) {
+            this.bottomCrab.leftClaw.extendLeftClaw();
+            this.bottomCrab.rightClaw.moveClaw();
+        } if (this.leftClawRetractActive) {
+            this.bottomCrab.leftClaw.retractClaw();
+            if (this.bottomCrab.leftClaw.r < 48) this.leftClawRetractActive = false;
         }
     }
 ```

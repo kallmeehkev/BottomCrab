@@ -54,6 +54,7 @@ export default class Game {
             }
             else if (this.gameWon(CONSTANTS.level1) && this.stage === 1) {
                 this.stage = 2;
+                this.peripheralCrabs.forEach(crab => crab.reset());
                 this.betweenLevels = true;
             }
             if (this.betweenLevels) {
